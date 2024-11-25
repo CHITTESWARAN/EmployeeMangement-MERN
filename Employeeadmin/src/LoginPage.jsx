@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { FaEyeSlash } from "react-icons/fa6";
 import { IoEye } from "react-icons/io5";
-import { UserContext } from "../src/UserContent"; // Go up one level and into the components folder
+import { UserContext } from "../src/UserContent"; 
 
 
 const LoginPage = () => {
@@ -21,18 +21,17 @@ const LoginPage = () => {
 
     axios.post("http://localhost:5000/login", { username, password }, { withCredentials: true })
       .then((respond) => {
-        console.log(respond.data); // Log the response for now
+        console.log(respond.data); 
 
-        setlogin(username);  // Set login state to true
-        
-        setRedirect(true);  // Redirect to home after login
+        setlogin(username);  
+        setRedirect(true);  
       })
       .catch((err) => {
-        console.log(err.message); // Handle error
+        console.log(err.message); 
       });
   }
 
-  // Redirect to home page if logged in
+  
   if (redirect) {
     return <Navigate to="/" />;
   }

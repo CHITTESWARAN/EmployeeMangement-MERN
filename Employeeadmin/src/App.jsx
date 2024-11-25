@@ -11,7 +11,7 @@ function App() {
   return (
     <UserContent>
       <Navbar />
-      <div style={{ paddingTop: "80px" }}> {/* Adjust for Navbar */}
+      <div style={{ paddingTop: "80px" }}>
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route path="/create" element={<CreateForm />} />

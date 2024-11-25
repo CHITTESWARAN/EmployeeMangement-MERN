@@ -12,7 +12,7 @@ const EmployeeList = () => {
   const handleEmployeeData = async () => {
     try {
       const response = await axios.get('http://localhost:5000/Emplists');
-      setEmployees(response.data || []); // Fallback to empty array if no data
+      setEmployees(response.data || []); 
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
@@ -23,7 +23,7 @@ const EmployeeList = () => {
     try {
       await axios.post('http://localhost:5000/remove', { id });
       alert('Employee Deleted Successfully');
-      handleEmployeeData(); // Refresh the employee list
+      handleEmployeeData(); 
     } catch (error) {
       console.error('Error deleting data:', error.message);
     }

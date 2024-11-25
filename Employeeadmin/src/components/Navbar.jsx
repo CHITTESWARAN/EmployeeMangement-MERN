@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-gradient-to-r from-gray-700 to-gray-900 text-white shadow-md">
-      {/* Logo Section */}
+  
       <div className="flex items-center space-x-2">
         <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center">
           <span className="text-gray-800 font-bold">D</span>
@@ -16,7 +16,7 @@ const Navbar = () => {
         <h1 className="text-2xl font-bold tracking-wide">DealsDray</h1>
       </div>
 
-      {/* Navigation Links */}
+   
       <nav className="hidden md:flex space-x-6">
         <Link to="/" className="text-sm uppercase font-semibold hover:text-gray-300">
           Home
@@ -25,7 +25,7 @@ const Navbar = () => {
 
       <div className="flex items-center space-x-4">
         {login ? (
-          // If logged in, show the username
+          
           <span className="text-sm text-white">Hi, {login}</span>
         ) : (
           <>

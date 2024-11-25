@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from "../UserContent";  // Correct relative path
+import { UserContext } from "../UserContent"; 
 
 
 const CreateForm = () => {
@@ -95,7 +95,7 @@ const CreateForm = () => {
           {updateid ? 'Update Profile' : 'Create Profile'}
         </h2>
 
-        {/* Name input */}
+       
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
           <input
@@ -109,7 +109,7 @@ const CreateForm = () => {
           />
         </div>
 
-        {/* Email input */}
+        
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -123,7 +123,7 @@ const CreateForm = () => {
           />
         </div>
 
-        {/* Phone input */}
+      
         <div className="mb-4">
           <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
           <input
@@ -137,7 +137,7 @@ const CreateForm = () => {
           />
         </div>
 
-        {/* Designation dropdown */}
+       
         <div className="mb-4">
           <label htmlFor="designation" className="block text-sm font-medium text-gray-700">Designation</label>
           <select
@@ -154,7 +154,7 @@ const CreateForm = () => {
           </select>
         </div>
 
-        {/* Gender radio buttons */}
+       
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Gender</label>
           <div className="mt-2 flex space-x-4">
@@ -181,7 +181,7 @@ const CreateForm = () => {
           </div>
         </div>
 
-        {/* Course checkboxes */}
+        
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700">Courses</label>
           <div className="flex space-x-4">
@@ -199,7 +199,6 @@ const CreateForm = () => {
           </div>
         </div>
 
-        {/* File input */}
         <div className="mb-6">
           <label htmlFor="file" className="block text-sm font-medium text-gray-700">Upload Profile Picture</label>
           <input
@@ -211,7 +210,7 @@ const CreateForm = () => {
           />
         </div>
 
-        {/* Submit button */}
+        
         <button
           type="submit"
           className="w-full bg-teal-500 text-white py-3 rounded-md hover:bg-teal-600"

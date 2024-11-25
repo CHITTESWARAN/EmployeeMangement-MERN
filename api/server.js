@@ -9,33 +9,30 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 // Models
-const User = require('./Models/user'); // Assuming User model exists
-const Employee = require('./Models/emp_detail'); // Assuming Employee model exists
-
+const User = require('./Models/user'); 
+const Employee = require('./Models/emp_detail'); 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-app.use(express.json()); // To parse JSON data
-app.use(bodyParser.urlencoded({ extended: true })); // To parse form data
+app.use(express.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
 
-// Serve static files from 'uploads' folder
 app.use('/uploads', express.static('uploads'));
 
-// Define the storage configuration for multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Save uploaded files to 'uploads' folder
+    cb(null, 'uploads/'); 
   },
   filename: function (req, file, cb) {
-    const fileExt = path.extname(file.originalname); // Get file extension
-    const fileName = Date.now() + fileExt; // Create a unique filename based on timestamp
+    const fileExt = path.extname(file.originalname); 
+    const fileName = Date.now() + fileExt;
     cb(null, fileName);
   }
 });
 
-// Create multer instance with the storage configuration
+
 const upload = multer({ storage: storage });
 
 // MongoDB Connection
@@ -53,7 +50,7 @@ connectDb();
 
 // JWT Authentication Middleware
 const authenticateJWT = (req, res, next) => {
-  const token = req.header("Authorization")?.split(" ")[1]; // Safely attempt to extract the token
+  const token = req.header("Authorization")?.split(" ")[1]; 
   
   if (!token) {
     return res.status(401).json({ message: "Authorization token missing" });
@@ -63,7 +60,7 @@ const authenticateJWT = (req, res, next) => {
     if (err) {
       return res.status(403).json({ message: "Token is not valid" });
     }
-    req.user = user; // Attach the user to the request
+    req.user = user;
     next();
   });
 };
@@ -112,13 +109,11 @@ app.post('/login', async (req, res) => {
     res.status(500).json('Server error');
   }
 });
-
-// POST route for creating employee profiles (file upload handled by Multer)
+ 
 app.post('/api/employees', upload.single('profilePicture'), async (req, res) => {
   const { name, email, phone, designation, gender, course } = req.body;
-  const profilePicture = req.file; // Multer automatically processes 'profilePicture'
+  const profilePicture = req.file;
 
-  // Validate the fields and ensure the file was uploaded
   if (!profilePicture) {
     return res.status(400).json('Profile picture is required');
   }
@@ -131,8 +126,8 @@ app.post('/api/employees', upload.single('profilePicture'), async (req, res) => 
       phone,
       designation,
       gender,
-      courses: course ? course.split(',') : [], // Assuming `course` is a comma-separated string
-      profilePicture: profilePicture.filename, // Store the filename of the uploaded picture
+      courses: course ? course.split(',') : [], 
+      profilePicture: profilePicture.filename, 
     });
 
     // Save the employee in the database
@@ -177,14 +172,14 @@ app.post('/remove',async (req, res) => {
 
 // POST route for updating an employee's details
 app.post('/api/update',async (req, res) => {
-  const { id, ...updates } = req.body;  // Destructure updates here
-  console.log('Received update for employee with ID:', id);  // Log the received data
+  const { id, ...updates } = req.body;  
+  console.log('Received update for employee with ID:', id);  
 
   try {
     const employee = await Employee.findByIdAndUpdate(
       id,
-      updates,  // Use the 'updates' variable here
-      { new: true } // Return the updated document
+      updates,  
+      { new: true }
     );
     if (!employee) {
       return res.status(404).json({ message: "Employee not found" });
@@ -196,7 +191,6 @@ app.post('/api/update',async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
