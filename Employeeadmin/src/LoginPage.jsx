@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { FaEyeSlash } from "react-icons/fa6";
 import { IoEye } from "react-icons/io5";
-import { UserContext } from "../src/UserContent"; 
+import { UserContext } from "../src/components/UserContent"; 
 
 
 const LoginPage = () => {
@@ -12,10 +12,10 @@ const LoginPage = () => {
   const [redirect, setRedirect] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Get context functions to update login state
+
   const { setlogin } = useContext(UserContext);
 
-  // Handle login form submission
+
   function handleLogin(e) {
     e.preventDefault();
 
@@ -36,7 +36,7 @@ const LoginPage = () => {
     return <Navigate to="/" />;
   }
 
-  // Toggle password visibility
+  
   function togglePasswordVisibility() {
     setShowPassword(!showPassword);
   }

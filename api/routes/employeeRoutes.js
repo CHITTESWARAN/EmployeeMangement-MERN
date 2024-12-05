@@ -1,26 +1,25 @@
-// routes/employeeRoutes.js
 const express = require('express');
-const upload = require('../config/config'); // Import multer config from config.js
-const Employee = require('../Models/emp_detail'); // Assuming Employee model exists
+const upload = require('../config/config'); 
+const Employee = require('../Models/emp_detail');
 const router = express.Router();
 import { useContext } from 'react';
 
 
-// POST route for creating employee profiles
+
 router.post('/api/employees', upload.single('file'), async (req, res) => {
   const { name, email, phone, designation, gender, course } = req.body;
   const file = req.file;
 
   try {
-    // Create the employee document
+ 
     const newEmployee = new Employee({
       name,
       email,
       phone,
       designation,
       gender,
-      course: course.split(','), // Assuming `course` is a comma-separated string
-      profilePic: file ? file.filename : null, // Save the filename
+      course: course.split(','), 
+      profilePic: file ? file.filename : null, 
     });
 
     await newEmployee.save();
@@ -40,13 +39,13 @@ router.put('/api/update', upload.single('file'), async (req, res) => {
   const file = req.file;
 
   try {
-    // Find the employee by ID
+ 
     const employee = await Employee.findById(id);
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
     }
 
-    // Update the fields
+  
     const updatedData = {
       name,
       email,
@@ -56,12 +55,12 @@ router.put('/api/update', upload.single('file'), async (req, res) => {
       course: course.split(','),
     };
 
-    // If a new profile picture is uploaded, update it
+
     if (file) {
-      updatedData.profilePic = file.filename; // Store the new profile picture filename
+      updatedData.profilePic = file.filename; 
     }
 
-    // Perform the update
+ 
     const updatedEmployee = await Employee.findByIdAndUpdate(id, updatedData, { new: true });
 
     res.json({

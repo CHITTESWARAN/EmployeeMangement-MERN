@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from "../UserContent"; 
-
+import { UserContext } from './UserContent';
 
 const CreateForm = () => {
   const { updateid, setUpdateid } = useContext(UserContext);
-  const [id,setid]=useState("");
+  const [id, setid] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -21,55 +20,53 @@ const CreateForm = () => {
   // Populate the form if updateid exists (for updating an employee)
   useEffect(() => {
     if (updateid) {
-      setid(updateid._id)
+      setid(updateid._id);
       setName(updateid.name);
       setEmail(updateid.email);
       setPhone(updateid.phone);
       setDesignation(updateid.designation);
       setGender(updateid.gender);
-      setCourse(updateid.course || []);
-      setFile(updateid.profilePicture);
+      setCourse(Array.isArray(updateid.courses) ? updateid.courses : updateid.courses.split(',') || []);
+      setFile(updateid?.profilePicture || null);
       setDateCreated(updateid.DateCreated);
     }
   }, [updateid]);
 
-  const handleCheckboxChange = (e) => {
-    const value = e.target.value;
-    if (e.target.checked) {
-      setCourse([...course, value]);
-    } else {
-      setCourse(course.filter((c) => c !== value));
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name || !email || !phone || !designation || !gender) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
-    formData.append('id',id);
+    formData.append('id', id);
     formData.append('phone', phone);
     formData.append('designation', designation);
     formData.append('gender', gender);
-    formData.append('course', course);
+    formData.append('courses', Array.isArray(course) ? course.join(',') : course);
     formData.append('DateCreated', dateCreated || Date.now());
-    formData.append('profilePicture', file);
+    console.log(formData.course,course,file);
+   
+    
+
+    if (file) {
+      formData.append('profilePicture', file);
+    }
 
     try {
-      let response;
-      if (updateid) {
-        // Update the employee
-        response = await axios.post('http://localhost:5000/api/update', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-      } else {
-        // Create a new employee
-        response = await axios.post('http://localhost:5000/api/employees', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-      }
+      const url = updateid ? 'http://localhost:5000/api/update' : 'http://localhost:5000/api/employees';
+
+      const response = await axios.post(url, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
       console.log('Success:', response.data);
       alert(updateid ? 'Employee updated successfully!' : 'Employee created successfully!');
+      // Clear form after submission
       setName('');
       setEmail('');
       setPhone('');
@@ -77,12 +74,20 @@ const CreateForm = () => {
       setGender('');
       setCourse([]);
       setFile(null);
-      setUpdateid(null); // Reset update context
+      setUpdateid(null);
       navigate('/');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error.response ? error.response.data : error.message);
       alert('Error saving data');
     }
+  };
+
+  // Handle checkbox change for courses
+  const handleCheckboxChange = (e) => {
+    const value = e.target.value;
+    setCourse((prevCourses) =>
+      prevCourses.includes(value) ? prevCourses.filter((course) => course !== value) : [...prevCourses, value]
+    );
   };
 
   return (
@@ -95,7 +100,6 @@ const CreateForm = () => {
           {updateid ? 'Update Profile' : 'Create Profile'}
         </h2>
 
-       
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
           <input
@@ -109,7 +113,6 @@ const CreateForm = () => {
           />
         </div>
 
-        
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
           <input
@@ -123,7 +126,6 @@ const CreateForm = () => {
           />
         </div>
 
-      
         <div className="mb-4">
           <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
           <input
@@ -137,7 +139,6 @@ const CreateForm = () => {
           />
         </div>
 
-       
         <div className="mb-4">
           <label htmlFor="designation" className="block text-sm font-medium text-gray-700">Designation</label>
           <select
@@ -154,7 +155,6 @@ const CreateForm = () => {
           </select>
         </div>
 
-       
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Gender</label>
           <div className="mt-2 flex space-x-4">
@@ -181,7 +181,6 @@ const CreateForm = () => {
           </div>
         </div>
 
-        
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700">Courses</label>
           <div className="flex space-x-4">
@@ -210,7 +209,6 @@ const CreateForm = () => {
           />
         </div>
 
-        
         <button
           type="submit"
           className="w-full bg-teal-500 text-white py-3 rounded-md hover:bg-teal-600"

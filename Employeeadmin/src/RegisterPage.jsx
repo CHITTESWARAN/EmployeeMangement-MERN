@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from "axios";
 import {useNavigate} from  "react-router-dom"
-import { UserContext } from './UserContent';
+import { UserContext } from './components/UserContent';
 import { FaEyeSlash } from "react-icons/fa6";
 import { IoEye } from "react-icons/io5";
 
